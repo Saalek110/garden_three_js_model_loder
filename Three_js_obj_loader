@@ -1,0 +1,352 @@
+        <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - loaders - OBJ loader</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	</head>
+
+	<body>
+	<table border=2><tr><td>
+
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "../three-js-master/build/three.module.js",
+					"three/addons/": "../three-js-master/examples/jsm/"
+				}
+			}
+		</script>
+
+		<script type="module">
+
+			import * as THREE from 'three';
+
+			import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+			
+			
+			let camera, scene,  renderer;
+
+			let object;
+
+                         //---- control camera ----
+                    let my_control=0;
+                    let rotation=0;                                 
+                    let flag=0;
+                        //-------------------------
+			init();
+            animate();
+			function init() {
+				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 9000 );
+				camera.position.z = 13;
+camera.position.y = 1;
+				// scene
+
+				scene = new THREE.Scene();
+
+				const ambientLight = new THREE.AmbientLight( 0xffffff );
+				scene.add( ambientLight );
+
+				const pointLight = new THREE.PointLight( 0xffffff, 15 );
+				camera.add( pointLight );
+				scene.add( camera );
+
+
+
+				// manager
+
+				function loadModel() {
+
+					object.traverse( function ( child ) {
+
+						if ( child.isMesh ) child.material.map = texture;
+
+					} );
+
+					object.position.y =0.2;
+					object.position.z =-2;
+					object.scale.setScalar( 0.01 );
+					scene.add( object );
+
+					render();
+
+				}
+
+				const manager = new THREE.LoadingManager( loadModel );
+
+				// texture
+
+				const textureLoader = new THREE.TextureLoader( manager );
+				const texture = textureLoader.load( 'textures/brick_diffuse.jpg', render );
+				texture.colorSpace = THREE.SRGBColorSpace;
+
+				// model
+
+				function onProgress( xhr ) {
+
+					if ( xhr.lengthComputable ) {
+
+						const percentComplete = xhr.loaded / xhr.total * 100;
+						console.log( 'model ' + percentComplete.toFixed( 2 ) + '% downloaded' );
+
+					}
+
+				}
+
+				function onError() {}
+
+				const loader = new OBJLoader( manager );
+				loader.load( 'model/model.obj', function ( obj ) {
+
+					object = obj;
+
+				}, onProgress, onError );
+
+       
+    //-------------------- stone ------------
+const geometry_stone = new THREE.BoxGeometry(  3,3,3 );
+
+const texture_stone = new THREE.TextureLoader().load(   'textures/stone.jpg' );
+
+const material_stone = new THREE.MeshBasicMaterial( { map: texture_stone } );
+    const mesh_stone = new THREE.Mesh( geometry_stone, material_stone );
+      
+    mesh_stone.position.x = -6;
+    mesh_stone.position.y = 1;
+    mesh_stone.position.z = -6;
+    scene.add( mesh_stone );
+    
+  //-------------------------- skybox -------------------
+const skyGeo = new THREE.SphereGeometry(4000, 25, 25);
+//First the geometry. I wanted it big and made it big
+             const texture_x = new THREE.TextureLoader().load(  'textures/sky.jpg' );
+   const material_sky = new THREE.MeshBasicMaterial( { map: texture_x } );
+           //Set everything together and add it to the scene here.
+
+             const sky = new THREE.Mesh(skyGeo, material_sky);
+                  sky.material.side = THREE.BackSide;
+                                         scene.add(sky);
+                                         
+                                        
+       
+    //-------------------- stone ------------
+const geometry_stone_m = new THREE.BoxGeometry(  0.2,3,4 );
+
+const texture_stone_m = new THREE.TextureLoader().load(   'textures/brick_diffuse.jpg' );
+
+const material_stone_m = new THREE.MeshBasicMaterial( { map: texture_stone_m } );
+    const mesh_stone_m = new THREE.Mesh( geometry_stone_m, material_stone_m );
+      
+    mesh_stone_m.position.x = -4;
+    mesh_stone_m.position.y = 1.5;
+    mesh_stone_m.position.z = 2;
+    scene.add( mesh_stone_m );
+
+//--------------- stone2 ------------
+const geometry_stone2 = new THREE.BoxGeometry(  0.2, 3, 4 );
+
+const mesh_stone2 = new THREE.Mesh( geometry_stone2, material_stone_m );
+                               mesh_stone2.position.x = 4;
+                              mesh_stone2.position.y = 1.5;
+                                 mesh_stone2.position.z = 2;
+   scene.add( mesh_stone2 );
+   //---------------
+
+
+    //=================
+    const map222 = new THREE.TextureLoader().load( 'textures/tree11.png' );
+    
+    const material222 = new THREE.SpriteMaterial( { map: map222, color: 0xffffff } );
+    
+    
+    
+    const sprite222 = new THREE.Sprite( material222 );
+    
+    sprite222.scale.set(20,20, 1)
+    
+     sprite222.position.x = 6;
+     sprite222.position.y =8;
+     sprite222.position.z = -30;
+
+ scene.add( sprite222 );          
+ 
+ 
+ const sprite3332 = new THREE.Sprite( material222 );
+ 
+ sprite3332.scale.set(20,20, 1)
+ 
+     sprite3332.position.x = -10;
+      sprite3332.position.y =8;
+      sprite3332.position.z = -30;
+ scene.add( sprite3332 );  
+ 
+ //================================
+ //------- red plane ------------
+ const geometry_yellow_plane2 = new THREE.PlaneGeometry( 5, 5 );
+
+ const material_yellow_plane2 = new THREE.MeshBasicMaterial( {color: 0xff0000, side: THREE.DoubleSide} );
+
+ const plane77 = new THREE.Mesh( geometry_yellow_plane2, material_yellow_plane2 );
+
+     plane77.position.x = -9;
+     plane77.position.y =2;
+     plane77.position.z = 2;
+ scene.add( plane77 );
+
+//===============
+ const geometry_yellow_plane = new THREE.PlaneGeometry( 5, 5 );
+  const material_yellow_plane = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+   const plane = new THREE.Mesh( geometry_yellow_plane, material_yellow_plane );
+        plane.position.x = 10;
+        plane.position.y =1;
+        plane.position.z = 1;
+    scene.add( plane );
+
+//===================
+  
+    
+//------------------ grass -------------------
+     var loader_grass = new THREE.TextureLoader();
+     
+        var texture4 = loader_grass.load( 'textures/grasslight-big.jpg', function ( texture ) {
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    texture.offset.set( 0, 0 );
+    texture.repeat.set( 200, 200 );
+    // your code
+} );
+var material_zz4 = new THREE.MeshBasicMaterial( { map: texture4 } );
+   my_draw(1000,0.1,1000,0,0,-1,material_zz4);
+       
+//===================================================
+             function my_draw(a, b , c , x, y , z ,material_x) {//function
+
+                var geometry_x = new THREE.BoxGeometry(  a, b, c );
+            var mesh_x = new THREE.Mesh( geometry_x, material_x );
+
+    mesh_x.position.x = x;
+    mesh_x.position.y = y;
+    mesh_x.position.z = z;
+    scene.add( mesh_x );
+}//function
+//============================%%%%%%%%%%%%%%%%%
+    
+    
+    
+				//
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+
+				//
+
+
+				//
+
+				window.addEventListener( 'resize', onWindowResize );
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function render() {
+
+				renderer.render( scene, camera );
+
+			}
+
+		
+		
+		function animate() {
+
+                requestAnimationFrame( animate );
+
+camera.rotation.y=rotation;
+camera.position.x += Math.sin(rotation) * my_control;
+camera.position.z += Math.cos(rotation) * my_control;
+
+       camera.updateProjectionMatrix();
+                renderer.render( scene, camera );
+            }
+		
+		
+		
+		
+		
+		//======================================================================
+
+function toggle1() {
+rotation +=0.2618;  
+}  // t1 function
+
+function toggle2() {
+     flag=0;
+ if(my_control==0     && flag==0)    {   my_control=0.1;    flag=1; }
+ if(my_control==0.1   && flag==0)    {   my_control=0.2;    flag=1; }
+if(my_control==0.2   && flag==0)    {   my_control=0.3;    flag=1; }
+if(my_control==0.3  && flag==0)    {   my_control=0.4;    flag=1; }
+if(my_control==0.4   && flag==0)    {   my_control=0.5;    flag=1; }
+}  // t2 function
+
+
+function toggle3() {
+    my_control=0;
+     
+}  // t3 function
+
+
+function toggle4() {
+      
+     flag=0;
+ if(my_control==0     && flag==0)    {   my_control=-0.1;    flag=1; }
+ if(my_control==-0.1   && flag==0)    {   my_control=-0.2;    flag=1; }
+if(my_control==-0.2   && flag==0)    {   my_control=-0.3;    flag=1; }
+if(my_control==-0.3  && flag==0)    {   my_control=-0.4;    flag=1; }
+if(my_control==-0.4   && flag==0)    {   my_control=-0.5;    flag=1; }
+}  // t4 function
+
+
+function toggle5() {
+     rotation -=0.2618;  
+}  // t5 function
+
+
+document.getElementById("PAW1").addEventListener("click", toggle1, false);
+document.getElementById("PAW2").addEventListener("click", toggle2, false);
+document.getElementById("PAW3").addEventListener("click", toggle3, false);
+document.getElementById("PAW4").addEventListener("click", toggle4, false);
+document.getElementById("PAW5").addEventListener("click", toggle5, false);
+        </script>
+        </td></tr>
+        <tr><td>Welcome</td></tr>
+        <tr><td>
+        
+        <button id="PAW1" class="pauseButton"  style="width:110px; height:80px;">left</button>
+        <button id="PAW2" class="pauseButton"  style="width:110px; height:80px;">back</button>
+        <button id="PAW3" class="pauseButton"  style="width:110px; height:80px;">stop</button>
+        <button id="PAW4" class="pauseButton"  style="width:110px; height:80px;">ahead</button>
+        <button id="PAW5" class="pauseButton"  style="width:110px; height:80px;">right</button>
+        
+		</td></tr></table>
+	----
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+	</body>
+</html>
+             
